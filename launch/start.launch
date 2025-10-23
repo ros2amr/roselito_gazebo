@@ -8,12 +8,16 @@
     <arg name="gui_required" value="true"/>
   </include>
 
-  <arg name="model" default="$(find-pkg-share roselito_description)/urdf/roselito.xacro"/>
+  <arg name="model" default="$(find-pkg-share roselito_gazebo)/urdf/roselito.xacro"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" exec="robot_state_publisher">
     <param name="robot_description" value="$(command 'xacro $(var model)')" type="str"/>
   </node>
 
+  <node name="joint_state_publisher" pkg="joint_state_publisher" exec="joint_state_publisher"/>
+
   <node name="spawn_roselito" pkg="gazebo_ros" exec="spawn_entity.py"
     args="-entity roselito -topic /robot_description"
   />
+
+  <include file="$(find-pkg-share ros_commons)/launch/rqt_steering.launch"/>
 </launch>

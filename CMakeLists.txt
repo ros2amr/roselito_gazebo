@@ -17,6 +17,14 @@ install(
     "share/${PROJECT_NAME}/launch/"
 )
 
+# Install launch files.
+install(
+  DIRECTORY
+    "urdf/"
+  DESTINATION
+    "share/${PROJECT_NAME}/urdf/"
+)
+
 # Install world files.
 install(
   DIRECTORY
