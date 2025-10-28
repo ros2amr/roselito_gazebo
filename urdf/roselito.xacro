@@ -8,52 +8,19 @@
 
 <robot name="roselito" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:include filename="$(find roselito_description)/urdf/roselito.xacro"/>
+  <xacro:include filename="$(find ros_commons)/urdf/gazebo.xacro"/>
 
-  <xacro:macro
-    name="add_controller"
-    params="position"
-  >
-    <gazebo>
-      <plugin name="wheels_${position}_controller" filename="libgazebo_ros_diff_drive.so">
-        <update_rate>50</update_rate>
-        <left_joint>joint_wheel_${position}_left</left_joint>
-        <right_joint>joint_wheel_${position}_right</right_joint>
-        <wheel_separation>${wheel_separation}</wheel_separation>
-        <wheel_diameter>${wheel_diameter}</wheel_diameter>
+  <xacro:differential_controller
+    name="wheels_center"
+    left_joint="joint_wheel_center_left"
+    right_joint="joint_wheel_center_right"
+    wheel_separation="${wheel_separation}"
+    wheel_diameter="${wheel_diameter}"
+  />
 
-        <max_wheel_torque>20</max_wheel_torque>
-        <max_wheel_acceleration>1.0</max_wheel_acceleration>
-
-        <command_topic>cmd_vel</command_topic>
-        <odometry_topic>odom</odometry_topic>
-
-        <odometry_frame>odom</odometry_frame>
-        <robot_base_frame>base_link</robot_base_frame>
-
-        <publish_odom>true</publish_odom>
-        <publish_odom_tf>true</publish_odom_tf>
-        <publish_wheel_tf>false</publish_wheel_tf>
-        <publish_wheel_joint_state>true</publish_wheel_joint_state>
-      </plugin>
-    </gazebo>
-  </xacro:macro>
-
-  <!-- See: http://sdformat.org/tutorials?tut=sdformat_urdf_extensions&cat=specification -->
-  <xacro:macro
-    name="remove_friction"
-    params="position"
-  >
-    <gazebo reference="wheel_${position}_left">
-      <mu1>0.0</mu1>
-      <mu2>0.0</mu2>
-    </gazebo>
-    <gazebo reference="wheel_${position}_right">
-      <mu1>0.0</mu1>
-      <mu2>0.0</mu2>
-    </gazebo>
-  </xacro:macro>
-
-  <xacro:add_controller position="center"/>
   <xacro:remove_friction position="front"/>
   <xacro:remove_friction position="rear"/>
+
+  <xacro:depth_camera name="camera_front"/>
+  <xacro:lidar_2d name="laser"/>
 </robot>
