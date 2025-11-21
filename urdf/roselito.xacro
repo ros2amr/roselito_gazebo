@@ -11,25 +11,42 @@
   <xacro:include filename="$(find ros_commons)/urdf/gazebo.xacro"/>
 
   <xacro:macro
-    name="add_controller"
+    name="wheel_joint_names"
     params="
       position
-      publish_odom:=false
     "
   >
-    <xacro:differential_controller
-      name="wheels_${position}"
-      left_joint="joint_wheel_${position}_left"
-      right_joint="joint_wheel_${position}_right"
-      wheel_separation="${wheel_separation}"
-      wheel_diameter="${wheel_diameter}"
-      publish_odom="${publish_odom}"
-    />
+    <joint_name>joint_wheel_${position}_left</joint_name>
+    <joint_name>joint_wheel_${position}_right</joint_name>
   </xacro:macro>
 
-  <xacro:add_controller position="front"/>
-  <xacro:add_controller position="center" publish_odom="true"/>
-  <xacro:add_controller position="rear"/>
+  <xacro:macro
+    name="wheel_attributes"
+    params="
+      position
+    "
+  >
+    <left_joint>joint_wheel_${position}_left</left_joint>
+    <right_joint>joint_wheel_${position}_right</right_joint>
+    <wheel_diameter>${wheel_diameter}</wheel_diameter>
+    <wheel_separation>${wheel_separation}</wheel_separation>
+  </xacro:macro>
+
+  <xacro:skid_controller
+    name="wheels"
+  >
+    <joints>
+      <xacro:wheel_joint_names position="front"/>
+      <xacro:wheel_joint_names position="center"/>
+      <xacro:wheel_joint_names position="rear"/>
+    </joints>
+    <wheels>
+      <num_wheel_pairs>3</num_wheel_pairs>
+      <xacro:wheel_attributes position="front"/>
+      <xacro:wheel_attributes position="center"/>
+      <xacro:wheel_attributes position="rear"/>
+    </wheels>
+  </xacro:skid_controller>
 
   <xacro:remove_friction position="front"/>
   <xacro:remove_friction position="rear"/>
