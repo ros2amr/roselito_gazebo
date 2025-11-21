@@ -17,5 +17,6 @@
     args="-entity roselito -topic /robot_description"
   />
 
+  <include file="$(find-pkg-share ros_commons)/launch/rviz_teleoperation.launch"/>
   <include file="$(find-pkg-share ros_commons)/launch/rqt_steering.launch"/>
 </launch>
