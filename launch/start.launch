@@ -17,6 +17,13 @@
     args="-entity roselito -topic /robot_description"
   />
 
-  <include file="$(find-pkg-share ros_commons)/launch/rviz_teleoperation.launch"/>
-  <include file="$(find-pkg-share ros_commons)/launch/rqt_steering.launch"/>
+  <arg name="path" default=""/>
+  <include file="$(find-pkg-share roselito_navigation)/launch/mapping.launch" if="$(eval '\'$(var path)\' == \'\'')"/>
+  <include file="$(find-pkg-share roselito_navigation)/launch/localization.launch" if="$(eval '\'$(var path)\' != \'\'')">
+    <arg name="path" value="$(var path)"/>
+  </include>
+
+  <include file="$(find-pkg-share roselito_gui)/launch/teleoperation.launch">
+    <arg name="mode" value="$(eval '\'mapping\' if \'$(var path)\' == \'\' else \'localization\'')"/>
+  </include>
 </launch>
