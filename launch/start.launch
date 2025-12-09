@@ -17,13 +17,13 @@
     args="-entity roselito -topic /robot_description"
   />
 
-  <arg name="path" default=""/>
-  <include file="$(find-pkg-share roselito_navigation)/launch/mapping.launch" if="$(eval '\'$(var path)\' == \'\'')"/>
-  <include file="$(find-pkg-share roselito_navigation)/launch/localization.launch" if="$(eval '\'$(var path)\' != \'\'')">
-    <arg name="path" value="$(var path)"/>
+  <arg name="map" default=""/>
+  <include file="$(find-pkg-share roselito_navigation)/launch/mapping.launch" if="$(eval '\'$(var map)\' == \'\'')"/>
+  <include file="$(find-pkg-share roselito_navigation)/launch/navigation.launch" if="$(eval '\'$(var map)\' != \'\'')">
+    <arg name="map" value="$(var map)"/>
   </include>
 
   <include file="$(find-pkg-share roselito_gui)/launch/teleoperation.launch">
-    <arg name="mode" value="$(eval '\'mapping\' if \'$(var path)\' == \'\' else \'localization\'')"/>
+    <arg name="mode" value="$(eval '\'mapping\' if \'$(var map)\' == \'\' else \'localization\'')"/>
   </include>
 </launch>
