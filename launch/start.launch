@@ -18,8 +18,11 @@
   />
 
   <arg name="map" default=""/>
-  <include file="$(find-pkg-share roselito_navigation)/launch/mapping.launch" if="$(eval '\'$(var map)\' == \'\'')"/>
-  <include file="$(find-pkg-share roselito_navigation)/launch/navigation.launch" if="$(eval '\'$(var map)\' != \'\'')">
+  <let name="mapping" value="'$(var map)' == ''"/>
+
+  <include file="$(find-pkg-share roselito_navigation)/launch/mapping.launch" if="$(eval '$(var mapping)')"/>
+  <include file="$(find-pkg-share roselito_navigation)/launch/navigation.launch" unless="$(eval '$(var mapping)')">
+    <arg name="use_sim_time" value="true"/>
     <arg name="map" value="$(var map)"/>
   </include>
 
